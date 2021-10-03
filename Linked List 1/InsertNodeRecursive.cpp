@@ -25,28 +25,78 @@ Sample Output 2 :
 /***************************************************** SOLUTION **********************************************************************/
 
 
+#include <iostream>
 
-Node* insertNodeRec(Node *head, int i, int data) {
-    
-    Node *newNode = new Node(data);
-	int count = 0;
-	Node *temp = head;
+using namespace std;
 
-	if(i == 0) {
-		newNode -> next = head;
-		head = newNode;
-		return head;
-	}
+class Node{
+    public:
+    int data;
+    Node *next;
+    Node(int data){
+      this->data=data;
+      next=NULL;
+  }
+};
 
-	while(temp != NULL && count < i - 1) {
-		temp = temp -> next;
-		count++;
-	}
-	if(temp != NULL) {
-		Node *a = temp -> next;
-		temp -> next = newNode;
-		newNode -> next = a;
-	}
-	return head;
-    
+void print(Node* head){
+    while(head!=NULL){
+        cout<<head->data<<" ";
+        head=head->next;
+    }
+    cout<<endl;
+}
+
+Node* input(){
+    int data;
+    Node *head=NULL;
+    Node *t=NULL;
+    while(true){
+        cin>>data;
+        if(data!=-1){
+	    if(head!=NULL){
+	        Node* temp=new Node(data);
+            	head->next=temp;
+            	head=head->next;
+	    }
+	    else{
+		 Node* n1=new Node(data);
+		 head=n1;
+		 t=n1;
+	    }
+        }
+        else{
+            return t;
+        }
+    }
+}
+
+Node* insert(Node *head,Node* n1,int i){
+    if(head==NULL)
+    return head;
+    if(i==-1){
+        n1->next=head;
+        return n1;
+    }
+    if(i==0){
+        Node *temp=head;
+        n1->next=temp->next;
+        temp->next=n1;
+        return head;
+    }
+    head->next=insert(head->next,n1,i-1);
+    return head;
+}
+int main()
+{
+    Node* head=input();
+    int d,i;
+    cout<<"Position: "<<endl;
+    cin>>i;
+    cout<<"Data to be inserted: "<<endl;
+    cin>>d;
+    Node *n1=new Node(d);
+    head=insert(head,n1,i-1);
+    print(head);
+    return 0;
 }
